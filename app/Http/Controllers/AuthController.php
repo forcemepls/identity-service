@@ -25,10 +25,11 @@ class AuthController extends Controller
             [
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'password' => Hash::make($request->password),  # хэш для проверки подлинности
             ]
         );
 
+        # JWT access token.
         $token = Auth::login($user);
 
         return response()->json(
@@ -38,7 +39,7 @@ class AuthController extends Controller
                 'user' => $user,
                 'authorisation' => [
                     'token' => $token,
-                    'type' => 'bearer'
+                    'type' => 'bearer'  # Type of authentication in HTTP
                 ],
             ]
         );
@@ -78,6 +79,12 @@ class AuthController extends Controller
     }
 
     public function logout(){
-
+        Auth::logout();
+        return response()->json(
+            [
+                'status' => 'success',
+                'message' => 'Successfully logged out',
+            ]
+        );
     }
 }
