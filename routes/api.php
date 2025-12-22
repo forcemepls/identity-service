@@ -16,5 +16,7 @@ Route::post('/refresh', [AuthController::class, 'refresh'])->middleware(['auth:a
 /**
     * Блок профиля
 */
-Route::get('/profile', [ProfileController::class, 'get_profile']);
-Route::put('/profile/update/{user_id}', [ProfileController::class, 'update_profile']);
+Route::middleware('auth:api')->group(function(){
+    Route::get('/profile', [ProfileController::class, 'get_profile']);
+    Route::put('/profile', [ProfileController::class, 'update_profile']);
+});
