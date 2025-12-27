@@ -4,19 +4,17 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+// Публичные
+Route::get('/users/{user_id}', [ProfileController::class, 'show_profile']);
 
-/**
-    * Блок авторизации/регистрации
-*/
+// Авторизация
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware(['auth:api']);
-Route::post('/refresh', [AuthController::class, 'refresh'])->middleware(['auth:api']);
 
-/**
-    * Блок профиля
-*/
+// Защищённые
 Route::middleware('auth:api')->group(function(){
-    Route::get('/profile', [ProfileController::class, 'get_profile']);
+    Route::get('/me', [ProfileController::class, 'get_profile']);
     Route::put('/profile', [ProfileController::class, 'update_profile']);
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/refresh', [AuthController::class, 'refresh']);
 });

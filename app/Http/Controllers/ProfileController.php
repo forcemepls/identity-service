@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Profile;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
@@ -25,6 +26,22 @@ class ProfileController extends Controller
             );
         }
         return response()->json($profile);
+    }
+
+    public function show_profile(int $user_id)
+    {
+        $user = User::findOrFail($user_id);
+
+        $profile = Profile::where('user_id', $user_id)->first();
+
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'profile' => $profile ? [
+                'avatar' => $profile->avatar,
+                'bio' =>    $profile->bio,
+            ] : null
+        ]);
     }
 
     public function update_profile(Request $request){
